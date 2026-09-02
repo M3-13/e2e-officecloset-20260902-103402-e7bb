@@ -6,14 +6,95 @@
       "dir": "frontend",
       "stack": "web-vite",
       "kind": "server",
-      "install": [["npm", "install"]],
-      "build": [["npm", "run", "build"]],
-      "start": ["npm", "run", "preview", "--", "--port", "${PORT}"],
+      "install": [
+        [
+          "npm",
+          "install"
+        ]
+      ],
+      "build": [
+        [
+          "npm",
+          "run",
+          "build"
+        ]
+      ],
+      "start": [
+        "npm",
+        "run",
+        "preview",
+        "--",
+        "--port",
+        "${PORT}"
+      ],
       "port": 5173,
       "port_env": "PORT",
-      "health": { "path": "/", "expect_status": [200] },
+      "health": {
+        "path": "/",
+        "expect_status": [
+          200
+        ]
+      },
       "env": {
-        "VITE_API_URL": { "dev": "http://localhost:8000" }
+        "VITE_API_URL": {
+          "dev": "http://localhost:8000"
+        }
+      }
+    },
+    {
+      "name": "api",
+      "dir": "backend",
+      "stack": "python",
+      "kind": "server",
+      "install": [
+        [
+          "${python}",
+          "-m",
+          "pip",
+          "install",
+          "-q",
+          "-r",
+          "requirements.txt"
+        ]
+      ],
+      "start": [
+        "${python}",
+        "-m",
+        "uvicorn",
+        "app.main:app",
+        "--port",
+        "${PORT}"
+      ],
+      "port": 8000,
+      "port_env": "PORT",
+      "health": {
+        "path": "/api/health",
+        "expect_status": [
+          200
+        ]
+      },
+      "env": {
+        "DATABASE_URL": {
+          "dev": "sqlite:///./dev.db"
+        },
+        "JWT_SECRET_KEY": {
+          "generate": "hex",
+          "bytes": 32
+        },
+        "ACCESS_TOKEN_EXPIRE_MINUTES": {
+          "dev": "15",
+          "not_secret": true,
+          "why": "plain configuration duration, not a credential"
+        },
+        "FRONTEND_ORIGIN": {
+          "dev": "http://localhost:5173"
+        },
+        "UPLOAD_DIR": {
+          "dev": "./uploads"
+        },
+        "MAX_UPLOAD_MB": {
+          "dev": "5"
+        }
       }
     }
   ]
