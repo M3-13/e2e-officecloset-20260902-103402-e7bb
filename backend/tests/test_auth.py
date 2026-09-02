@@ -3,7 +3,11 @@
 import os
 from datetime import UTC, datetime
 
-os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+# Deliberately do NOT set DATABASE_URL here: this module imports app.main, which
+# creates the shared SQLAlchemy engine once. Setting it to a ":memory:" URL at
+# import time would hijack that engine for every test module (test_outfits.py
+# relies on the engine being a real file so it survives across threads).
+# These tests are isolated via app.dependency_overrides[get_db] below instead.
 os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-auth-tests"
 
 import pytest
