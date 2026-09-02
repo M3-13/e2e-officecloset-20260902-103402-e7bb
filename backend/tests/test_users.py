@@ -48,7 +48,17 @@ def _override_get_db():
         db.close()
 
 
-app.dependency_overrides[get_db] = _override_get_db
+@pytest.fixture(autouse=True)
+def _use_test_db():
+    previous = app.dependency_overrides.get(get_db)
+    app.dependency_overrides[get_db] = _override_get_db
+    try:
+        yield
+    finally:
+        if previous is None:
+            app.dependency_overrides.pop(get_db, None)
+        else:
+            app.dependency_overrides[get_db] = previous
 
 
 @pytest.fixture(autouse=True)
