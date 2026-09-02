@@ -9,4 +9,8 @@ export default defineConfig({
   preview: {
     port: 5173,
   },
+  test: {
+    environment: "node",
+    include: ["src/**/*.test.{js,jsx,ts,tsx}"],
+  },
 });

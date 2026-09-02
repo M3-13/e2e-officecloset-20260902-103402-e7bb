@@ -1,5 +1,5 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import { AuthProvider, useAuth } from "./auth/auth-context";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./auth/auth-context";
 import Layout from "./components/Layout";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -10,8 +10,7 @@ import ImpressumPage from "./pages/ImpressumPage";
 import DatenschutzPage from "./pages/DatenschutzPage";
 
 function ProtectedRoute() {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return <Outlet />;
 }
 
 export default function App() {
