@@ -1,0 +1,231 @@
+/* Shared styles for the outfit creator and outfit overview pages.
+   Uses the design tokens from styles/theme.css. */
+
+/* Responsive grid: 2 cols mobile, 3 from 640px, 4 from 1024px */
+.outfit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .outfit-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .outfit-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Section spacing */
+.outfit-section {
+  margin-top: var(--space-6);
+}
+
+.outfit-section:first-child {
+  margin-top: 0;
+}
+
+/* --- Selectable item card --- */
+.outfit-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  position: relative;
+  cursor: pointer;
+  text-align: left;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  color: var(--color-fg);
+  font-family: inherit;
+  transition: border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.outfit-item:hover {
+  border-color: rgba(212, 175, 55, 0.45);
+  transform: translateY(-2px);
+}
+
+.outfit-item--selected {
+  border-color: var(--color-accent);
+}
+
+.outfit-item__thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.outfit-item__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.outfit-item__thumb span {
+  color: var(--color-muted);
+  font-size: 1.5rem;
+}
+
+.outfit-item__name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.outfit-item__category {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.outfit-item__check {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+/* --- Creator two-column layout --- */
+.outfit-creator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+@media (min-width: 1024px) {
+  .outfit-creator {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .outfit-creator__select {
+    flex: 3;
+  }
+
+  .outfit-creator__preview {
+    flex: 2;
+    position: sticky;
+    top: 80px;
+  }
+}
+
+.outfit-preview__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+.outfit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.outfit-form__label {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.outfit-form__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* --- Overview outfit card --- */
+.outfit-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: var(--color-fg);
+  width: 100%;
+}
+
+.outfit-card__name {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.outfit-card__count {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.outfit-card__thumbs {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.outfit-card__thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background-color: var(--color-surface-alt);
+}
+
+.outfit-card__thumb--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+}
+
+/* --- Detail view --- */
+.outfit-detail__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.outfit-detail__actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* --- Feedback states --- */
+.outfit-error {
+  color: var(--color-danger);
+  font-size: 0.95rem;
+}
+
+.outfit-empty {
+  color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .outfit-item,
+  .outfit-item:hover {
+    transition-duration: 0.01ms !important;
+  }
+}
