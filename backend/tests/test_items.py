@@ -17,15 +17,18 @@ from fastapi import HTTPException
 from fastapi.testclient import TestClient
 from starlette.datastructures import Headers, UploadFile
 
+from app.config import settings
 from app.db import SessionLocal
 from app.main import app
 from app.models import User
 from app.security import create_access_token
 from app.upload import enforce_upload_size_limit, save_image
 
-UPLOAD_DIR = Path(os.environ["UPLOAD_DIR"])
-
 _counter = itertools.count()
+
+
+def _image_path(user_id: int, item_id: int, extension: str) -> Path:
+    return Path(settings.upload_dir) / str(user_id) / f"{item_id}{extension}"
 
 
 def _create_user() -> User:
@@ -170,7 +173,7 @@ def test_update_item_replaces_image_and_removes_old_file(client) -> None:
         headers=headers,
     ).json()
 
-    old_path = UPLOAD_DIR / str(user.id) / f"{created['id']}.png"
+    old_path = _image_path(user.id, created["id"], ".png")
     assert old_path.is_file()
 
     updated = client.put(
@@ -184,7 +187,7 @@ def test_update_item_replaces_image_and_removes_old_file(client) -> None:
     assert updated.json()["image_url"] == f"/api/items/{created['id']}/image"
 
     assert not old_path.is_file()
-    new_path = UPLOAD_DIR / str(user.id) / f"{created['id']}.webp"
+    new_path = _image_path(user.id, created["id"], ".webp")
     assert new_path.is_file()
 
 
@@ -206,7 +209,7 @@ def test_update_item_keeps_image_when_no_new_image(client) -> None:
     assert updated.status_code == 200
     assert updated.json()["name"] == "Neu"
     assert updated.json()["image_url"] == f"/api/items/{created['id']}/image"
-    assert (UPLOAD_DIR / str(user.id) / f"{created['id']}.png").is_file()
+    assert _image_path(user.id, created["id"], ".png").is_file()
 
 
 def test_delete_item_removes_item_and_image(client) -> None:
@@ -218,7 +221,7 @@ def test_delete_item_removes_item_and_image(client) -> None:
         files={"image": ("a.png", b"png-a", "image/png")},
         headers=headers,
     ).json()
-    path = UPLOAD_DIR / str(user.id) / f"{created['id']}.png"
+    path = _image_path(user.id, created["id"], ".png")
     assert path.is_file()
 
     resp = client.delete(f"/api/items/{created['id']}", headers=headers)
