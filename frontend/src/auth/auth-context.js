@@ -10,7 +10,7 @@ import * as api from "../api";
 
 const AuthContext = createContext(null);
 
-function decodeToken(token) {
+export function decodeToken(token) {
   if (!token) {
     return null;
   }
@@ -24,7 +24,7 @@ function decodeToken(token) {
   }
 }
 
-function userFromToken(token) {
+export function userFromToken(token) {
   const claims = decodeToken(token);
   return claims && claims.sub ? { id: claims.sub } : null;
 }
